@@ -4,6 +4,7 @@ import 'screens/auth/login_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/objects/add_object_screen.dart';
 import 'screens/objects/object_details_screen.dart';
+import 'screens/objects/report_stolen_object_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/add_object': (context) => const AddObjectScreen(),
         '/object_details': (context) => const ObjectDetailsScreen(),
+        '/report_stolen': (context) => const ReportStolenObjectScreen(),
       },
     );
   }
