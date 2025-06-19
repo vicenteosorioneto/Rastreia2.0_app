@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:objeto_rastreado_app/services/local_storage_service.dart';
+import 'package:objeto_rastreado_app/services/api_service.dart';
 
 class StolenObjectsScreen extends StatefulWidget {
   const StolenObjectsScreen({Key? key}) : super(key: key);
@@ -9,12 +9,13 @@ class StolenObjectsScreen extends StatefulWidget {
 }
 
 class _StolenObjectsScreenState extends State<StolenObjectsScreen> {
-  final LocalStorageService _storageService = LocalStorageService();
+  final ApiService _apiService = ApiService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
-  List<StolenObject> _objects = [];
+  List<Map<String, dynamic>> _objects = [];
+  bool _loading = false;
 
   @override
   void initState() {
@@ -23,10 +24,19 @@ class _StolenObjectsScreenState extends State<StolenObjectsScreen> {
   }
 
   Future<void> _loadObjects() async {
-    final objects = await _storageService.getStolenObjects();
-    setState(() {
-      _objects = objects;
-    });
+    setState(() => _loading = true);
+    try {
+      final objects = await _apiService.fetchStolenObjects();
+      setState(() {
+        _objects = objects;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao buscar objetos: $e')));
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
   Future<void> _addObject() async {
@@ -34,43 +44,44 @@ class _StolenObjectsScreenState extends State<StolenObjectsScreen> {
         _descriptionController.text.isEmpty ||
         _dateController.text.isEmpty)
       return;
-    final newObject = StolenObject(
-      name: _nameController.text,
-      description: _descriptionController.text,
-      date: _dateController.text,
-    );
-    _objects.add(newObject);
-    await _storageService.saveStolenObjects(_objects);
-    _nameController.clear();
-    _descriptionController.clear();
-    _dateController.clear();
-    _loadObjects();
+    setState(() => _loading = true);
+    try {
+      await _apiService.addStolenObject(
+        name: _nameController.text,
+        description: _descriptionController.text,
+        date: _dateController.text,
+      );
+      _nameController.clear();
+      _descriptionController.clear();
+      _dateController.clear();
+      await _loadObjects();
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao adicionar objeto: $e')));
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
-  Future<void> _removeObject(int index) async {
-    _objects.removeAt(index);
-    await _storageService.saveStolenObjects(_objects);
-    _loadObjects();
-  }
-
-  Future<void> _removeAllObjects() async {
-    await _storageService.removeStolenObjects();
-    _loadObjects();
+  Future<void> _removeObject(int id) async {
+    setState(() => _loading = true);
+    try {
+      await _apiService.deleteStolenObject(id);
+      await _loadObjects();
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao remover objeto: $e')));
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Objetos Roubados'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete_forever),
-            onPressed: _removeAllObjects,
-            tooltip: 'Remover todos',
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Objetos Roubados (API)')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -90,8 +101,10 @@ class _StolenObjectsScreenState extends State<StolenObjectsScreen> {
             ),
             const SizedBox(height: 12),
             ElevatedButton(
-              onPressed: _addObject,
-              child: const Text('Adicionar objeto'),
+              onPressed: _loading ? null : _addObject,
+              child: _loading
+                  ? const CircularProgressIndicator()
+                  : const Text('Adicionar objeto'),
             ),
             const SizedBox(height: 24),
             const Text(
@@ -100,7 +113,9 @@ class _StolenObjectsScreenState extends State<StolenObjectsScreen> {
             ),
             const SizedBox(height: 8),
             Expanded(
-              child: _objects.isEmpty
+              child: _loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _objects.isEmpty
                   ? const Center(child: Text('Nenhum objeto cadastrado.'))
                   : ListView.builder(
                       itemCount: _objects.length,
@@ -108,13 +123,13 @@ class _StolenObjectsScreenState extends State<StolenObjectsScreen> {
                         final obj = _objects[index];
                         return Card(
                           child: ListTile(
-                            title: Text(obj.name),
+                            title: Text(obj['title'] ?? ''),
                             subtitle: Text(
-                              'Descrição: ${obj.description}\nData: ${obj.date}',
+                              'Descrição: ${obj['body'] ?? ''}\nData: ${obj['date'] ?? ''}',
                             ),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete),
-                              onPressed: () => _removeObject(index),
+                              onPressed: () => _removeObject(obj['id'] ?? 0),
                               tooltip: 'Remover',
                             ),
                           ),
