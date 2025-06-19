@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../home/police_home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String userType;
@@ -184,8 +185,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // TODO: Implementar cadastro
-                    Navigator.pushReplacementNamed(context, '/home');
+                    if (widget.userType == 'police') {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PoliceHomeScreen(),
+                        ),
+                      );
+                    } else {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(
