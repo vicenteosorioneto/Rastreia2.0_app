@@ -81,7 +81,19 @@ class _StolenObjectsScreenState extends State<StolenObjectsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Objetos Roubados (API)')),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          },
+        ),
+        title: const Text('Objetos Roubados (API)'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

@@ -37,7 +37,19 @@ class _LocalStorageExampleState extends State<LocalStorageExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Exemplo SharedPreferences')),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          },
+        ),
+        title: Text('Exemplo SharedPreferences'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

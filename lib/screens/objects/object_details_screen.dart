@@ -39,6 +39,16 @@ class ObjectDetailsScreen extends StatelessWidget {
                 },
               ),
             ],
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (route) => false,
+                );
+              },
+            ),
           ),
 
           // Conteúdo

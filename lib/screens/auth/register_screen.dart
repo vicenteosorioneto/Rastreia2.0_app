@@ -34,6 +34,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           'Cadastro de ${widget.userType == 'citizen' ? 'Cidadão' : 'Policial'}',
           style: GoogleFonts.poppins(fontWeight: FontWeight.w600),

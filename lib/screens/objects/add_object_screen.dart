@@ -37,6 +37,16 @@ class _AddObjectScreenState extends State<AddObjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          },
+        ),
         title: Text(
           'Adicionar Objeto',
           style: GoogleFonts.poppins(fontWeight: FontWeight.w600),

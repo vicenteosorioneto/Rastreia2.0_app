@@ -75,6 +75,16 @@ class _ReportStolenObjectScreenState extends State<ReportStolenObjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          },
+        ),
         title: Text(
           'Registrar Objeto Roubado',
           style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
