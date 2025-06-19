@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "165878596498",
+    "firebase_url": "https://rastreiabd-80a2f-default-rtdb.firebaseio.com",
+    "project_id": "rastreiabd-80a2f",
+    "storage_bucket": "rastreiabd-80a2f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165878596498:android:d86222dc2d6d28fe93774b",
+        "android_client_info": {
+          "package_name": "com.example.objeto_rastreado_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwu6HQgd_5AjHe6LvKe1z1iKK3tNyULm0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165878596498:android:8af805ab0ddf64bc93774b",
+        "android_client_info": {
+          "package_name": "com.vicente.rastreia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwu6HQgd_5AjHe6LvKe1z1iKK3tNyULm0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
