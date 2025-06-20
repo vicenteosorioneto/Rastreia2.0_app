@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'user_type_screen.dart';
+import 'package:objeto_rastreado_app/services/local_storage_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   final String? userType;
@@ -15,6 +17,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
+
+  final LocalStorageService _localStorage = LocalStorageService();
 
   @override
   void dispose() {
@@ -140,9 +144,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 24),
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  // TODO: Implementar lógica de login
                                   if (widget.userType == 'police') {
                                     Navigator.pushReplacementNamed(
                                       context,
@@ -196,5 +199,32 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void testarLocalStorage() async {
+    // Adiciona um objeto
+    final objetos = await _localStorage.getStolenObjects();
+    objetos.add(
+      StolenObject(
+        name: 'Teste',
+        description: 'Descrição teste',
+        date: DateTime.now().toString(),
+      ),
+    );
+    await _localStorage.saveStolenObjects(objetos);
+
+    // Lê todos os objetos
+    final lidos = await _localStorage.getStolenObjects();
+    print('Objetos lidos: ${lidos.length}');
+    for (var obj in lidos) {
+      print(obj.toJson());
+    }
+  }
+
+  void testarSharedPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('teste_key', 'funcionou');
+    final valor = prefs.getString('teste_key');
+    print('Valor salvo: $valor');
   }
 }
