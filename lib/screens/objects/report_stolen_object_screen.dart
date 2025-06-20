@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:objeto_rastreado_app/services/api_service.dart';
 
 class ReportStolenObjectScreen extends StatefulWidget {
   const ReportStolenObjectScreen({super.key});
@@ -31,6 +32,8 @@ class _ReportStolenObjectScreenState extends State<ReportStolenObjectScreen> {
   ];
 
   final List<String> _status = ['Roubo', 'Furto', 'Extravio'];
+
+  final ApiService _apiService = ApiService();
 
   @override
   void dispose() {
@@ -324,10 +327,31 @@ class _ReportStolenObjectScreenState extends State<ReportStolenObjectScreen> {
 
               // Botão de salvar
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // TODO: Implementar salvamento do objeto roubado
-                    Navigator.pop(context);
+                    try {
+                      await _apiService.addStolenObject(
+                        name: _nameController.text,
+                        description: _descriptionController.text,
+                        date: _dateController.text,
+                      );
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Objeto registrado com sucesso!'),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Erro ao registrar objeto: $e'),
+                          ),
+                        );
+                      }
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(

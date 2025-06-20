@@ -5,6 +5,8 @@ import 'screens/home/home_screen.dart';
 import 'screens/objects/add_object_screen.dart';
 import 'screens/objects/object_details_screen.dart';
 import 'screens/objects/report_stolen_object_screen.dart';
+import 'screens/home/police_home_screen.dart';
+import 'screens/auth/user_type_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,10 +29,12 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(),
         useMaterial3: true,
       ),
-      initialRoute: '/login',
+      initialRoute: '/user_type',
       routes: {
+        '/user_type': (context) => const UserTypeScreen(),
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
+        '/police_home': (context) => const PoliceHomeScreen(),
         '/add_object': (context) => const AddObjectScreen(),
         '/object_details': (context) => const ObjectDetailsScreen(),
         '/report_stolen': (context) => const ReportStolenObjectScreen(),

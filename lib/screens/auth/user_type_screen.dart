@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
+import 'login_screen.dart';
 
 class UserTypeScreen extends StatelessWidget {
   const UserTypeScreen({super.key});
@@ -70,7 +71,7 @@ class UserTypeScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const RegisterScreen(userType: 'citizen'),
+                                    LoginScreen(userType: 'citizen'),
                               ),
                             );
                           },
@@ -88,7 +89,7 @@ class UserTypeScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const RegisterScreen(userType: 'police'),
+                                    LoginScreen(userType: 'police'),
                               ),
                             );
                           },

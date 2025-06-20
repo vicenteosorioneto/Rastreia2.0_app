@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'user_type_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String? userType;
+  const LoginScreen({super.key, this.userType});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
               context,
-              '/login',
+              '/user_type',
               (route) => false,
             );
           },
@@ -142,10 +143,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   // TODO: Implementar lógica de login
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    '/home',
-                                  );
+                                  if (widget.userType == 'police') {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      '/police_home',
+                                    );
+                                  } else {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      '/home',
+                                    );
+                                  }
                                 }
                               },
                               style: ElevatedButton.styleFrom(
